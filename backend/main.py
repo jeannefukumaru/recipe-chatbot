@@ -9,6 +9,9 @@ from fastapi import FastAPI, HTTPException, status
 from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, Field
+import uuid
+import pandas as pd
+from datetime import datetime
 
 from backend.utils import get_agent_response  # noqa: WPS433 import from parent
 
@@ -70,6 +73,11 @@ async def chat_endpoint(payload: ChatRequest) -> ChatResponse:  # noqa: WPS430
 
     # Convert dicts back to Pydantic models for the response
     response_messages: List[ChatMessage] = [ChatMessage(**msg) for msg in updated_messages_dicts]
+    response_messages_df = pd.DataFrame(response_messages)
+    # Save the conversation history to a CSV file
+    print("saving conversation history to CSV")
+    id = datetime.now().strftime("%Y%m%d%H%M%S")
+    response_messages_df.to_csv(f"conversation_history_{id}.csv", index=False)
     return ChatResponse(messages=response_messages)
 
 
