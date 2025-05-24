@@ -6,7 +6,7 @@ This module centralises the system prompt, environment loading, and the
 wrapper around litellm so the rest of the application stays decluttered.
 """
 
-from pathlib import Path
+import os
 from typing import Final, List, Dict
 
 import litellm  # type: ignore
@@ -18,6 +18,7 @@ load_dotenv(override=False)
 # --- Constants -------------------------------------------------------------------
 
 SYSTEM_PROMPT: Final[str] = (
+<<<<<<< HEAD
     """You are an expert chef like Yotam Ottolenghi, Eric Kim or Hetty Lui McKinnon recommending delicious and useful recipes in the style of NYTCooking. 
     Present only one recipe at a time. 
 
@@ -49,16 +50,17 @@ SYSTEM_PROMPT: Final[str] = (
     DO NOT DO THIS:
     1. misclassify ingredients, for example saying that feta is vegan, or that a recipe is gluten free when it contains gluten
     """
+=======
+    "You are an expert chef recommending delicious and useful recipes. "
+    "Present only one recipe at a time. If the user doesn't specify what ingredients "
+    "they have available, assume only basic ingredients are available."
+    "Be descriptive in the steps of the recipe, so it is easy to follow."
+    "Have variety in your recipes, don't just recommend the same thing over and over."
+>>>>>>> 55f7fd1ce7f50b5b51326397a65e72c43c306461
 )
 
 # Fetch configuration *after* we loaded the .env file.
-MODEL_NAME: Final[str] = (
-    Path.cwd()  # noqa: WPS432
-    .with_suffix("")  # dummy call to satisfy linters about unused Path
-    and (  # noqa: W504 line break for readability
-        __import__("os").environ.get("MODEL_NAME", "gpt-3.5-turbo")
-    )
-)
+MODEL_NAME: Final[str] = os.environ.get("MODEL_NAME", "gpt-4o-mini")
 
 
 # --- Agent wrapper ---------------------------------------------------------------
