@@ -176,3 +176,4 @@ cython_debug/
 
 # Our files
 results/*
+*.DS_Store
